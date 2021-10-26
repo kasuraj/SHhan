@@ -6,7 +6,7 @@ BEQ proc
 JMP $c210
 proc
 STX $04
-STY $03;备份原2006
+STY $03 ;备份原2006
 
 LDA $2002
 
@@ -25,7 +25,7 @@ INY
 DEX
 BNE loop1
 
-LDA $6006;当前tile指针
+LDA $6006 ;当前tile指针
 STA $2006
 LDA $6005
 CLC
@@ -41,7 +41,7 @@ INY
 DEX
 BNE loop2
 
-LDA $6006;当前tile指针
+LDA $6006 ;当前tile指针
 STA $2006
 LDA $6005
 CLC
@@ -57,7 +57,7 @@ INY
 DEX
 BNE loop3
 
-LDA $6006;当前tile指针
+LDA $6006 ;当前tile指针
 STA $2006
 LDA $6005
 CLC
