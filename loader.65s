@@ -1,0 +1,15 @@
+.ORG $8000
+LDA #$80
+STA $a001
+LDY $00
+
+loadLoop
+LDA $8100,y
+STA $7000,y
+LDA $8200,y
+STA $7100,y
+LDA $8300,y
+STA $7200,y
+INY
+BNE loadLoop
+JMP $7000

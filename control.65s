@@ -1,0 +1,144 @@
+.ORG $7100
+
+CMP #$04
+BCC mod
+JSR $c08d
+JMP $8411
+mod
+STA $6000 ;保存bank号
+LDY $058C 
+LDA ($19),y;获取下一个文本,也就是当前tile数据的指针
+STA $600a
+
+CMP #$80
+BCC basea000
+LDA #$0b
+STA $6009 ;清空,准备计算tile数据的地址
+BNE procLoad
+basea000
+LDA #$0a
+STA $6009 ;清空,准备计算tile数据的地址
+
+
+procLoad
+ASL $600a
+LDA #$07 ;开始切页
+STA $8000
+LDA $6000
+CLC
+ADC #$1F ;加上偏移
+STA $8001;切页完成
+
+LDA #$00
+STA $6008
+sta $6005
+LDA #$01
+STA $6006
+
+LDA $600a
+CLC
+ASL
+ROL $6009
+ASL 
+ROL $6009
+ASL 
+ROL $6009
+ASL 
+ROL $6009
+
+LDA $600a
+SEC
+LSR  
+ROR $6008
+LSR  
+ROR $6008
+LSR  
+ROR $6008
+LSR  
+ROR $6008
+
+LDA $6007
+CLC
+ASL
+ROL $6006
+ASL
+ROL $6006
+ASL
+ROL $6006
+ASL
+ROL $6006
+
+LDA $6007
+SEC
+LSR  
+ROR $6005
+LSR  
+ROR $6005
+LSR  
+ROR $6005
+LSR  
+ROR $6005
+
+LDA $00
+STA $600b
+LDA $01
+STA $600c ; 备份00指针
+
+LDY #$00
+LDX #$08
+LDA $6008
+STA $00
+LDA $6009
+STA $01
+loadloop
+LDA ($00),y
+STA $6100,y
+INY
+DEX
+BNE loadloop
+
+LDY #$10
+LDX #$08
+loadloop2
+LDA ($00),y
+STA $60f8,y
+INY
+DEX
+BNE loadloop2
+
+LDY #$20
+LDX #$08
+loadloop3
+LDA ($00),y
+STA $60f0,y
+INY
+DEX
+BNE loadloop3
+
+LDY #$30
+LDX #$08
+loadloop4
+LDA ($00),y
+STA $60e8,y
+INY
+DEX
+BNE loadloop4
+
+LDA $600b
+STA $00
+LDA $600c
+STA $01
+
+LDA #$07
+STA $8000
+LDA $6001
+STA $8001 ;恢复原bank
+
+
+JSR $c08d
+LDA #$8e
+STA $4f
+LDA #$05
+STA $50
+LDA #$04
+JMP $841b
